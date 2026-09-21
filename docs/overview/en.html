@@ -293,13 +293,6 @@
   }
   footer p { margin: 0; font-size: 12.5px; color: var(--text-muted); font-family: 'IBM Plex Mono', monospace; }
 
-  .lang-switch { display: flex; gap: 4px; }
-  .lang-switch a {
-    font-family: 'IBM Plex Mono', monospace; font-size: 11px; text-decoration: none;
-    color: var(--text-muted); border: 1px solid var(--border); border-radius: 2px; padding: 4px 8px;
-  }
-  .lang-switch a.current { color: var(--accent); border-color: var(--accent); background: var(--accent-soft); }
-
   @media (max-width: 720px) {
     .quickstart { grid-template-columns: 1fr; }
     .handoff { grid-template-columns: 1fr; }
@@ -319,14 +312,7 @@
       <h1>Substance Bridge</h1>
       <span class="tagline">a two-way bridge between 3ds Max and Substance Painter for PBR texturing</span>
     </div>
-    <div style="display:flex; align-items:center; gap:10px;">
-      <nav class="lang-switch">
-        <a class="current" href="https://claude.ai/artifact/KtDqsejqcHcCQA7Gb3EnyR">EN</a>
-        <a href="https://claude.ai/artifact/PQTUJbZ5iDUyhSqocwRfKb">FR</a>
-        <a href="https://claude.ai/artifact/RpWNGEVPs8dtYRRKybwWxa">RU</a>
-      </nav>
-      <span class="version-badge">v2.7.0</span>
-    </div>
+    <span class="version-badge">v2.7.0</span>
   </div>
   <div class="wrap">
     <nav class="pills" id="chapter-nav">

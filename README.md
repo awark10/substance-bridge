@@ -4,16 +4,9 @@
 Одна кнопка в Max перевіряє UV, пакує текстури, експортує FBX і відкриває Painter.
 Одна кнопка в Painter повертає готові 4K-текстури назад у Max і сама призначає їх матеріалам.
 
-Технічний огляд проєкту (архітектура, повний цикл, система ефектів, стан): **[awark10.github.io/substance-bridge](https://awark10.github.io/substance-bridge/)**
-
-- 🇬🇧 [English](https://awark10.github.io/substance-bridge/overview/en.html)
-- 🇫🇷 [Français](https://awark10.github.io/substance-bridge/overview/fr.html)
-- 🇷🇺 [Русский](https://awark10.github.io/substance-bridge/overview/ru.html)
-
-Ті самі сторінки також опубліковані як Claude Artifacts:
-[EN](https://claude.ai/artifact/KtDqsejqcHcCQA7Gb3EnyR) ·
-[FR](https://claude.ai/artifact/PQTUJbZ5iDUyhSqocwRfKb) ·
-[RU](https://claude.ai/artifact/RpWNGEVPs8dtYRRKybwWxa)
+Технічний огляд проєкту (архітектура, повний цикл, система ефектів, стан):
+**[awark10.github.io/substance-bridge](https://awark10.github.io/substance-bridge/)**
+(також опубліковано як [Claude Artifact](https://claude.ai/artifact/KtDqsejqcHcCQA7Gb3EnyR))
 
 ## Структура
 
@@ -25,7 +18,7 @@
 | `aerial_grass_rock_diff.png` | Текстура трави/каменю для ефекту ADD GROUND DIRT |
 | `Run_Substance_Bridge_Installer.ms` | MZP-інсталятор — розкладає файли по потрібних теках 3ds Max / Painter |
 | `SubstanceBridge_*i.bmp` / `*a.bmp` | Іконки кнопки на панелі інструментів (legacy формат, колір + альфа-маска) |
-| `docs/` | Інструкції з встановлення (UA/EN/RU) і копії overview-сторінок |
+| `docs/` | Інструкції з встановлення (UA/EN/RU) і копія overview-сторінки (EN) |
 
 ## Встановлення
 
