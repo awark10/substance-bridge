@@ -1,0 +1,61 @@
+======================================================================
+   SUBSTANCE PAINTER BRIDGE - INSTALLATION GUIDE
+======================================================================
+
+STEP 1: Installation in 3ds Max
+--------------------------------------------------
+1. Open 3ds Max.
+2. Drag and drop the 'Substance_Bridge_Injector.mcr' file into the
+   3ds Max viewport.
+3. Go to 'Customize' -> 'Customize User Interface' -> 'Toolbars' tab.
+4. In the 'Category' list, find 'Physicl'.
+5. Drag 'Substance Bridge' onto your toolbar.
+
+STEP 2: Installation in Substance Painter
+--------------------------------------------------
+1. Copy the 'SP_To_Max_Bridge.py' file.
+2. Go to the Substance Painter plugins folder. The usual path is:
+   C:\Users\<Your_Name>\Documents\Adobe Substance 3D Painter\python\plugins\
+   (If the 'plugins' folder doesn't exist, create it manually inside 'python').
+3. Paste the 'SP_To_Max_Bridge.py' file there.
+4. Launch Substance Painter.
+5. In the top menu, go to 'Python' and make sure the 'SP_To_Max_Bridge'
+   plugin is enabled (checkmark next to it).
+
+STEP 3: How to Use
+--------------------------------------------------
+1. In 3ds Max:
+   - Select your model.
+   - Click the 'SEND TO PAINTER' button in the Substance Bridge window.
+   - The script checks for the presence and quality of the UV unwrap.
+     If there is no UV, or it is invalid (outside the 0-1 tile or has
+     overlapping islands), you will be prompted to automatically create
+     a simple unwrap.
+   - The model is exported to FBX, then Substance Painter launches
+     automatically.
+
+2. In Substance Painter ('3DS MAX BRIDGE' plugin panel):
+   - The project is created automatically from the exported FBX.
+   - Base textures are imported and assigned automatically
+     ('Base Baked' layer).
+   - Optionally add wear-and-tear effects:
+       * '1. ADD DIRT'        - dirt layer + Dirt Intensity slider.
+       * '2. ADD WEATHERING'  - weathering streaks layer + Weathering
+                                Intensity slider.
+   - The sliders adjust effect intensity in real time.
+
+3. Sending textures back to 3ds Max:
+   - In Substance Painter, click '3. SEND TO MAX (EXPORT 4K)'.
+   - Confirm the export. The 4K textures are saved and Substance Painter
+     closes automatically.
+   - In 3ds Max you DO NOT need to press anything. The script runs in the
+     background: it detects the new textures, copies them into a 'textures'
+     folder next to your scene, and assigns them to the materials. The
+     temporary C:\SubstanceBridge folder is then deleted.
+
+IMPORTANT:
+- File exchange path: C:\SubstanceBridge\ (created automatically).
+- Do not rename objects or materials after export - the script matches
+  textures by name.
+- V-Ray (VRayMtl) and Physical Material are supported.
+======================================================================

@@ -1,0 +1,714 @@
+<title>Substance Bridge</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@700;800;900&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+  :root {
+    --bg: #eef0f1;
+    --surface: #e3e7e9;
+    --surface-2: #ffffff;
+    --border: #c5cbd0;
+    --border-soft: #d5d9dc;
+    --text: #1a2024;
+    --text-muted: #5c6670;
+    --accent: #a8481f;
+    --accent-2: #3d5a6c;
+    --accent-soft: rgba(168,72,31,0.10);
+    --accent-2-soft: rgba(61,90,108,0.10);
+    --mono-bg: #dfe3e5;
+    --sem-done: #2f6b46;
+    --sem-pending: #6d6a4d;
+    --sem-limit: #9c5a17;
+    --shadow: 0 1px 0 rgba(20,24,27,0.04);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #14181b;
+      --surface: #1b2025;
+      --surface-2: #20262b;
+      --border: #2b3238;
+      --border-soft: #262c31;
+      --text: #e9e6e0;
+      --text-muted: #9aa3aa;
+      --accent: #dd8148;
+      --accent-2: #7fa4b8;
+      --accent-soft: rgba(221,129,72,0.14);
+      --accent-2-soft: rgba(127,164,184,0.12);
+      --mono-bg: #20262b;
+      --sem-done: #5fb37e;
+      --sem-pending: #a3a087;
+      --sem-limit: #d99a4d;
+      --shadow: none;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #14181b;
+    --surface: #1b2025;
+    --surface-2: #20262b;
+    --border: #2b3238;
+    --border-soft: #262c31;
+    --text: #e9e6e0;
+    --text-muted: #9aa3aa;
+    --accent: #dd8148;
+    --accent-2: #7fa4b8;
+    --accent-soft: rgba(221,129,72,0.14);
+    --accent-2-soft: rgba(127,164,184,0.12);
+    --mono-bg: #20262b;
+    --sem-done: #5fb37e;
+    --sem-pending: #a3a087;
+    --sem-limit: #d99a4d;
+    --shadow: none;
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'IBM Plex Sans', -apple-system, 'Segoe UI', sans-serif;
+    font-size: 16px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    * { animation: none !important; transition: none !important; }
+  }
+
+  h1, h2, h3 {
+    font-family: 'Archivo', 'Arial Narrow', sans-serif;
+    font-weight: 900;
+    text-wrap: balance;
+    margin: 0;
+    letter-spacing: -0.01em;
+  }
+  code, .mono { font-family: 'IBM Plex Mono', 'SFMono-Regular', Consolas, monospace; }
+
+  a { color: var(--accent); }
+
+  .wrap { max-width: 920px; margin: 0 auto; padding-inline: 24px; }
+
+  /* ---------- header ---------- */
+  header.top {
+    position: sticky; top: 0; z-index: 20;
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+  }
+  .top-row {
+    display: flex; align-items: baseline; justify-content: space-between;
+    gap: 16px; padding-block: 16px 12px;
+    flex-wrap: wrap;
+  }
+  .brand { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+  .brand h1 { font-size: 22px; }
+  .brand .tagline { color: var(--text-muted); font-size: 13px; }
+  .version-badge {
+    font-family: 'IBM Plex Mono', monospace; font-size: 12px; font-weight: 500;
+    color: var(--accent); border: 1px solid var(--accent); background: var(--accent-soft);
+    padding: 4px 9px; border-radius: 2px; white-space: nowrap;
+  }
+  nav.pills {
+    display: flex; gap: 6px; overflow-x: auto; padding-block: 0 12px;
+    -webkit-overflow-scrolling: touch; scrollbar-width: none;
+  }
+  nav.pills::-webkit-scrollbar { display: none; }
+  nav.pills a {
+    flex: 0 0 auto;
+    font-family: 'IBM Plex Mono', monospace; font-size: 11.5px; text-decoration: none;
+    color: var(--text-muted); border: 1px solid var(--border); border-radius: 2px;
+    padding: 5px 10px; white-space: nowrap;
+  }
+  nav.pills a.active { color: var(--accent); border-color: var(--accent); background: var(--accent-soft); }
+
+  main { padding-block: 8px 40px; }
+
+  /* ---------- hero ---------- */
+  .eyebrow {
+    font-family: 'IBM Plex Mono', monospace; font-size: 12px; font-weight: 500;
+    letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent);
+    margin-bottom: 10px; display: block;
+  }
+  .hero { padding-block: 28px 6px; }
+  .hero p.lead { max-width: 62ch; font-size: 17px; color: var(--text); margin: 0; }
+  .hero p.lead code { background: var(--mono-bg); padding: 1px 5px; border-radius: 2px; font-size: 0.92em; }
+
+  .stat-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+    gap: 1px; background: var(--border); border: 1px solid var(--border);
+    margin-top: 26px; border-radius: 2px; overflow: hidden;
+  }
+  .stat {
+    background: var(--surface); padding: 16px 16px 14px;
+  }
+  .stat .num { font-family: 'IBM Plex Mono', monospace; font-weight: 500; font-size: 26px; color: var(--accent); font-variant-numeric: tabular-nums; }
+  .stat .label { font-size: 12.5px; color: var(--text-muted); margin-top: 4px; }
+
+  hr.rule { border: none; border-top: 1px solid var(--border); margin: 40px 0 0; }
+
+  /* ---------- chapters ---------- */
+  section.chapter { padding-block: 46px 4px; scroll-margin-top: 96px; }
+  section.chapter .chnum {
+    font-family: 'IBM Plex Mono', monospace; color: var(--accent); font-size: 13px; font-weight: 500;
+  }
+  section.chapter h2 { font-size: 30px; margin-top: 8px; }
+  section.chapter .intro { color: var(--text-muted); max-width: 66ch; margin-top: 10px; font-size: 15px; }
+
+  .badge {
+    display: inline-flex; align-items: center; gap: 5px;
+    font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; font-weight: 500; letter-spacing: 0.04em;
+    padding: 2px 8px; border-radius: 2px; white-space: nowrap; text-transform: uppercase;
+  }
+  .badge.max { color: var(--accent-2); border: 1px solid var(--accent-2); background: var(--accent-2-soft); }
+  .badge.sp  { color: var(--accent); background: var(--accent); color: var(--bg); border: 1px solid var(--accent); }
+
+  /* ---------- handoff diagram ---------- */
+  .handoff {
+    display: grid; grid-template-columns: 1fr 74px 1.2fr 74px 1fr;
+    align-items: stretch; gap: 0; margin-top: 26px;
+  }
+  .handoff .box {
+    background: var(--surface); border: 1px solid var(--border); padding: 16px;
+  }
+  .handoff .box h3 { font-size: 14px; font-family: 'IBM Plex Sans'; font-weight: 600; }
+  .handoff .box .sub { color: var(--text-muted); font-size: 12.5px; margin-top: 4px; }
+  .handoff .hub .mono { display: block; font-size: 12.5px; line-height: 1.9; margin-top: 10px; white-space: pre; }
+  .handoff .hub .mono b { color: var(--text); font-weight: 500; }
+  .handoff .hub .mono .c { color: var(--text-muted); }
+  .handoff .arrowcell {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 4px; padding: 8px 2px; text-align: center;
+  }
+  .handoff .arrowcell .glyph { font-size: 20px; color: var(--accent); line-height: 1; }
+  .handoff .arrowcell .cap { font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; color: var(--text-muted); line-height: 1.35; }
+
+  .callout {
+    border-left: 3px solid var(--accent); background: var(--surface);
+    padding: 13px 16px; margin-top: 20px; font-size: 14px;
+  }
+  .callout b { color: var(--text); }
+
+  /* ---------- step list ---------- */
+  .steps { margin-top: 26px; display: flex; flex-direction: column; }
+  .step { display: grid; grid-template-columns: 40px 1fr; gap: 14px; padding-block: 16px; border-top: 1px solid var(--border-soft); }
+  .step:first-child { border-top: 1px solid var(--border); }
+  .step .n { font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: var(--text-muted); padding-top: 2px; }
+  .step .head { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 4px; }
+  .step .head h4 { font-family: 'IBM Plex Sans'; font-size: 15px; font-weight: 600; margin: 0; }
+  .step p { margin: 0; color: var(--text-muted); font-size: 14px; max-width: 66ch; }
+  .step code { background: var(--mono-bg); padding: 1px 5px; border-radius: 2px; font-size: 0.9em; color: var(--text); }
+
+  /* ---------- effect cards ---------- */
+  .effect-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); margin-top: 26px; }
+  .effect {
+    background: var(--surface); padding: 18px 16px;
+    display: flex; flex-direction: column; gap: 8px;
+  }
+  .effect .idx { font-family: 'IBM Plex Mono', monospace; color: var(--accent); font-size: 12px; }
+  .effect h4 { font-family: 'IBM Plex Sans'; font-size: 15.5px; font-weight: 600; margin: 0; }
+  .effect p { margin: 0; font-size: 13.5px; color: var(--text-muted); flex: 1; }
+  .effect .params { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--text-muted); background: var(--mono-bg); padding: 8px 10px; border-radius: 2px; line-height: 1.6; }
+
+  /* ---------- tables ---------- */
+  .tbl-wrap { overflow-x: auto; margin-top: 22px; border: 1px solid var(--border); }
+  table { width: 100%; border-collapse: collapse; font-size: 13.5px; min-width: 520px; }
+  thead th {
+    text-align: left; font-family: 'IBM Plex Mono', monospace; font-weight: 500; font-size: 11px;
+    letter-spacing: 0.05em; text-transform: uppercase; color: var(--text-muted);
+    background: var(--surface); padding: 10px 14px; border-bottom: 1px solid var(--border);
+  }
+  tbody td { padding: 10px 14px; border-bottom: 1px solid var(--border-soft); vertical-align: top; }
+  tbody tr:last-child td { border-bottom: none; }
+  tbody td.code { font-family: 'IBM Plex Mono', monospace; font-size: 12.5px; color: var(--accent); white-space: nowrap; }
+  .status-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 8px; position: relative; top: -1px; }
+  .status-dot.done { background: var(--sem-done); }
+  .status-dot.pending { background: var(--sem-pending); }
+  .status-dot.limit { background: var(--sem-limit); }
+
+  /* ---------- quirks ---------- */
+  .quirks { margin-top: 24px; display: flex; flex-direction: column; }
+  .quirk { display: flex; gap: 12px; padding-block: 14px; border-top: 1px solid var(--border-soft); }
+  .quirk:first-child { border-top: 1px solid var(--border); }
+  .quirk .mark { color: var(--accent); font-family: 'IBM Plex Mono', monospace; padding-top: 2px; }
+  .quirk p { margin: 0; font-size: 14.5px; color: var(--text-muted); }
+  .quirk p b { color: var(--text); font-weight: 600; }
+
+  /* ---------- two-pass box (UV chapter) ---------- */
+  .pass-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--border); border: 1px solid var(--border); margin-top: 24px; }
+  .pass { background: var(--surface); padding: 16px; }
+  .pass .idx { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; }
+  .pass h4 { font-family: 'IBM Plex Sans'; font-size: 14.5px; font-weight: 600; margin: 6px 0 6px; }
+  .pass p { margin: 0; font-size: 13.5px; color: var(--text-muted); }
+  .pass code { background: var(--mono-bg); padding: 1px 5px; border-radius: 2px; font-size: 0.88em; color: var(--text); }
+
+  /* ---------- distribution list ---------- */
+  .dist { margin-top: 22px; display: flex; flex-direction: column; gap: 14px; }
+  .dist-item { display: flex; gap: 14px; }
+  .dist-item .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); margin-top: 8px; flex: 0 0 auto; }
+  .dist-item p { margin: 0; font-size: 14.5px; color: var(--text-muted); }
+  .dist-item p b { color: var(--text); }
+  .dist-item code { background: var(--mono-bg); padding: 1px 5px; border-radius: 2px; font-size: 0.88em; color: var(--text); }
+
+  /* ---------- video cards ---------- */
+  .video-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); margin-top: 26px; }
+  .video-card { background: var(--surface); display: flex; flex-direction: column; text-decoration: none; color: inherit; }
+  .video-card .thumb { position: relative; aspect-ratio: 16/9; overflow: hidden; background: var(--mono-bg); }
+  .video-card .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; filter: saturate(0.85); transition: filter .15s ease, transform .15s ease; }
+  .video-card:hover .thumb img { filter: saturate(1); transform: scale(1.03); }
+  .video-card .play {
+    position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+  }
+  .video-card .play span {
+    width: 46px; height: 46px; border-radius: 50%; background: rgba(20,24,27,0.55);
+    display: flex; align-items: center; justify-content: center; backdrop-filter: blur(1px);
+  }
+  .video-card .play svg { width: 16px; height: 16px; fill: #f2efe9; margin-left: 2px; }
+  .video-card .meta { padding: 14px 16px 16px; display: flex; flex-direction: column; gap: 6px; flex: 1; }
+  .video-card .kicker { font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; color: var(--accent); text-transform: uppercase; letter-spacing: 0.06em; }
+  .video-card h4 { font-family: 'IBM Plex Sans'; font-size: 14.5px; font-weight: 600; margin: 0; }
+  .video-card p { margin: 0; font-size: 13px; color: var(--text-muted); flex: 1; }
+  .video-card .link { font-family: 'IBM Plex Mono', monospace; font-size: 11.5px; color: var(--accent); margin-top: 2px; }
+
+  footer {
+    border-top: 1px solid var(--border); margin-top: 48px; padding-block: 20px 40px;
+  }
+  footer p { margin: 0; font-size: 12.5px; color: var(--text-muted); font-family: 'IBM Plex Mono', monospace; }
+
+  .lang-switch { display: flex; gap: 4px; }
+  .lang-switch a {
+    font-family: 'IBM Plex Mono', monospace; font-size: 11px; text-decoration: none;
+    color: var(--text-muted); border: 1px solid var(--border); border-radius: 2px; padding: 4px 8px;
+  }
+  .lang-switch a.current { color: var(--accent); border-color: var(--accent); background: var(--accent-soft); }
+
+  @media (max-width: 720px) {
+    .handoff { grid-template-columns: 1fr; }
+    .handoff .arrowcell { flex-direction: row; padding: 10px 4px; }
+    .handoff .arrowcell .glyph { transform: rotate(90deg); }
+    .effect-grid { grid-template-columns: 1fr; }
+    .pass-grid { grid-template-columns: 1fr; }
+    .video-grid { grid-template-columns: 1fr; }
+    .step { grid-template-columns: 28px 1fr; }
+    section.chapter h2 { font-size: 25px; }
+  }
+</style>
+
+<header class="top">
+  <div class="wrap top-row">
+    <div class="brand">
+      <h1>Substance Bridge</h1>
+      <span class="tagline">un pont bidirectionnel 3ds Max ↔ Substance Painter pour le texturage PBR</span>
+    </div>
+    <div style="display:flex; align-items:center; gap:10px;">
+      <nav class="lang-switch">
+        <a href="https://claude.ai/artifact/KtDqsejqcHcCQA7Gb3EnyR">EN</a>
+        <a class="current" href="https://claude.ai/artifact/PQTUJbZ5iDUyhSqocwRfKb">FR</a>
+        <a href="https://claude.ai/artifact/RpWNGEVPs8dtYRRKybwWxa">RU</a>
+      </nav>
+      <span class="version-badge">v2.7.0</span>
+    </div>
+  </div>
+  <div class="wrap">
+    <nav class="pills" id="chapter-nav">
+      <a href="#ch-01" data-n="1">01 Le pont</a>
+      <a href="#ch-02" data-n="2">02 Le cycle complet</a>
+      <a href="#ch-03" data-n="3">03 Réparation UV</a>
+      <a href="#ch-04" data-n="4">04 Effets</a>
+      <a href="#ch-05" data-n="5">05 Matériaux</a>
+      <a href="#ch-06" data-n="6">06 Particularités</a>
+      <a href="#ch-07" data-n="7">07 État</a>
+      <a href="#ch-08" data-n="8">08 Vidéos</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <div class="hero">
+    <span class="eyebrow">Description technique</span>
+    <p class="lead">
+      Substance Bridge automatise le texturage PBR entre 3ds Max et Substance Painter.
+      Un bouton dans Max vérifie les UV, cuit les textures existantes, exporte un FBX et ouvre Painter.
+      Un bouton dans Painter renvoie les textures 4K terminées vers Max et les assigne lui-même aux
+      matériaux. Les deux processus ne communiquent jamais directement — tout l'échange passe par des
+      fichiers déposés dans un dossier partagé, <code>C:\SubstanceBridge\</code>, qu'un minuteur MAXScript
+      interroge chaque seconde.
+    </p>
+    <div class="stat-grid">
+      <div class="stat"><div class="num">3</div><div class="label">effets procéduraux — Dirt, Weathering, Ground Dirt</div></div>
+      <div class="stat"><div class="num">4</div><div class="label">canaux PBR en aller-retour — BaseColor, Roughness, Metallic, Normal</div></div>
+      <div class="stat"><div class="num">1s</div><div class="label">intervalle d'interrogation du dossier partagé</div></div>
+      <div class="stat"><div class="num">2</div><div class="label">matériaux pris en charge — VRayMtl, PhysicalMaterial</div></div>
+    </div>
+  </div>
+
+  <hr class="rule">
+
+  <!-- 01 -->
+  <section class="chapter" id="ch-01">
+    <span class="chnum">01</span>
+    <h2>Deux processus, un seul dossier</h2>
+    <p class="intro">3ds Max et Substance Painter ne sont jamais connectés directement — aucune API, aucun
+    socket. Tout le protocole d'échange consiste en fichiers qui apparaissent et disparaissent dans un
+    dossier partagé sur le disque.</p>
+
+    <div class="handoff">
+      <div class="box">
+        <span class="badge max">3ds Max</span>
+        <h3 style="margin-top:8px">Substance_Bridge_Injector.mcr</h3>
+        <div class="sub">MAXScript, vit dans userMacros. UI, vérification des UV, cuisson, export FBX, import automatique au retour.</div>
+      </div>
+      <div class="arrowcell">
+        <span class="glyph">→</span>
+        <span class="cap">SP_Export.fbx<br>temp_bkd\*.png</span>
+      </div>
+      <div class="box hub">
+        <span class="badge" style="color:var(--text-muted);border:1px solid var(--border)">dossier partagé</span>
+        <h3 style="margin-top:8px">C:\SubstanceBridge\</h3>
+        <span class="mono"><b>SP_Export.fbx</b>       <span class="c">← modèle venant de Max</span>
+<b>temp_bkd\*.png</b>     <span class="c">← textures cuites</span>
+<b>tex_sp\*.png</b>       <span class="c">→ 4K finales venant de Painter</span>
+<b>*.spp</b>              <span class="c">projet Painter, le cas échéant</span></span>
+      </div>
+      <div class="arrowcell">
+        <span class="glyph">←</span>
+        <span class="cap">tex_sp\*.png</span>
+      </div>
+      <div class="box">
+        <span class="badge sp">Painter</span>
+        <h3 style="margin-top:8px">SP_To_Max_Bridge.py</h3>
+        <div class="sub">Plugin Python pour SP, PySide2/6. Charge le FBX automatiquement, exécute les effets, exporte le 4K vers Max.</div>
+      </div>
+    </div>
+
+    <div class="callout">
+      <b>Le dossier est entièrement supprimé</b> (<code>deleteFolderRecursive</code>) juste après un import
+      réussi dans Max — c'est voulu, pour que chaque nouvelle exécution reparte d'un état propre.
+    </div>
+  </section>
+
+  <hr class="rule">
+
+  <!-- 02 -->
+  <section class="chapter" id="ch-02">
+    <span class="chnum">02</span>
+    <h2>Le cycle complet</h2>
+    <p class="intro">Des objets sélectionnés dans Max jusqu'aux matériaux assignés dans Max — huit étapes qui
+    passent d'une application à l'autre sans intervention humaine, à part le travail de texturage lui-même.</p>
+
+    <div class="steps">
+      <div class="step">
+        <div class="n">01</div>
+        <div>
+          <div class="head"><span class="badge max">Max</span><h4>SEND TO PAINTER</h4></div>
+          <p>Un clic sur le bouton. Rien de sélectionné — une messageBox « No objects selected », et ça s'arrête là.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="n">02</div>
+        <div>
+          <div class="head"><span class="badge max">Max</span><h4>Vérification des UV</h4></div>
+          <p><code>checkAndEnsureUV()</code> effectue deux passes : d'abord les objets sans aucun UV, puis ceux
+          dont le dépliage est de mauvaise qualité. Les lacunes sont comblées automatiquement via
+          <code>step1_CreateUV1_Direct()</code>.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="n">03</div>
+        <div>
+          <div class="head"><span class="badge max">Max</span><h4>Uniformisation des matériaux</h4></div>
+          <p><code>ensureObjectNamedMaterials()</code> copie et renomme un matériau pour qu'il corresponde à
+          son objet dès qu'ils divergent — Painter crée un Texture Set par matériau, donc sans cette étape
+          des objets se perdent.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="n">04</div>
+        <div>
+          <div class="head"><span class="badge max">Max</span><h4>Cuisson et export</h4></div>
+          <p>Les textures existantes sont copiées dans <code>temp_bkd\</code>, la scène part en FBX (Y-up, cm,
+          tangentes, sélection uniquement), et Substance Painter se lance.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="n">05</div>
+        <div>
+          <div class="head"><span class="badge sp">Painter</span><h4>Chargement automatique</h4></div>
+          <p>Récupère <code>SP_Export.fbx</code>, importe <code>temp_bkd\</code> comme ressources, cuit les
+          mesh maps (Normal, World Space Normal, AO, Position, Curvature — 4096×4096) et les assigne à un
+          calque « Base Baked ».</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="n">06</div>
+        <div>
+          <div class="head"><span class="badge sp">Painter</span><h4>L'artiste travaille</h4></div>
+          <p>ADD DIRT / ADD WEATHERING / ADD GROUND DIRT — chacun avec son propre curseur d'intensité. La case
+          « Apply to all models » propage un effet sur tous les Texture Sets de la scène à la fois.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="n">07</div>
+        <div>
+          <div class="head"><span class="badge sp">Painter</span><h4>SEND TO MAX</h4></div>
+          <p>Exporte des PNG 4K sur les canaux <code>_D / _R / _M / _N</code> (plus <code>_A</code> pour les
+          modèles en cutout) dans <code>tex_sp\</code>, puis Painter se ferme.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="n">08</div>
+        <div>
+          <div class="head"><span class="badge max">Max</span><h4>Import automatique</h4></div>
+          <p>Le minuteur <code>tmr_checkSubstance</code> (interroge chaque seconde, vérifie deux fois la taille
+          du fichier à 0,2s d'intervalle) récupère les nouveaux PNG, les déplace dans <code>textures\</code>
+          de la scène, les assigne à VRayMtl/PhysicalMaterial, et supprime <code>C:\SubstanceBridge\</code>.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="rule">
+
+  <!-- 03 -->
+  <section class="chapter" id="ch-03">
+    <span class="chnum">03</span>
+    <h2>Réparation automatique des UV</h2>
+    <p class="intro">Des primitives paramétriques et un dépliage cassé sont la raison la plus fréquente pour
+    laquelle Painter refuse un modèle. Le bridge le vérifie lui-même et corrige sans la moindre boîte de
+    dialogue « pas d'UV ».</p>
+
+    <div class="pass-grid">
+      <div class="pass">
+        <span class="idx">Passe 1</span>
+        <h4>Objets sans aucun UV</h4>
+        <p><code>hasUVChannel1</code> vaut vrai si un modificateur Unwrap_UVW existe, ou si l'objet est un
+        Editable_Poly/Mesh collapsé avec <code>numTVerts &gt; 0</code>. Une primitive paramétrique sans
+        Unwrap vaut faux.</p>
+      </div>
+      <div class="pass">
+        <span class="idx">Passe 2</span>
+        <h4>Objets de mauvaise qualité</h4>
+        <p><code>validateUVQuality</code> renvoie <code>outOfBounds</code> (un sommet hors de 0–1) et
+        <code>hasOverlaps</code> (surface totale des faces UV &gt; 1,05).</p>
+      </div>
+    </div>
+
+    <div class="callout">
+      <b>Stratégie de double empaquetage.</b> Une première passe avec rotation redresse les îlots (Unfold3D),
+      puis <code>autoOrientUVs()</code> corrige les murs retournés à 90°, puis une seconde passe sans rotation
+      garde les murs bien droits.
+    </div>
+  </section>
+
+  <hr class="rule">
+
+  <!-- 04 -->
+  <section class="chapter" id="ch-04">
+    <span class="chnum">04</span>
+    <h2>Le système d'effets</h2>
+    <p class="intro">Trois calques procéduraux côté Painter, chacun avec son propre bouton et son curseur
+    d'intensité. Ils vivent entièrement dans des générateurs et des smart masks — rien n'est peint à la main.</p>
+
+    <div class="effect-grid">
+      <div class="effect">
+        <span class="idx">1 · ADD DIRT</span>
+        <h4>Poussière et crasse</h4>
+        <p>Calque de remplissage « Dirt », couleur en BaseColor uniquement, masque noir plus un générateur
+        Dirt. Le curseur pilote <code>dirt_level</code> sur chaque générateur.</p>
+        <div class="params">level 0.51 · contrast 0.45<br>grunge_amount 0.3 · grunge_scale 4<br>edges_masking 0.5</div>
+      </div>
+      <div class="effect">
+        <span class="idx">2 · ADD WEATHERING</span>
+        <h4>Coulures d'intempéries</h4>
+        <p>Cherche une Smart Mask personnalisée nommée <code>SB_Weathering</code> (World Space Normals + Dirt
+        Leak Dry + Blur Directional + Position — des coulures sous les appuis de fenêtre). Pas de masque
+        trouvé — repli sur AO + une texture de coulures, en Multiply.</p>
+        <div class="params">fill « Weather Streaks »<br>smart mask privilégiée<br>curseur → set_opacity par calque</div>
+      </div>
+      <div class="effect">
+        <span class="idx">3 · ADD GROUND DIRT</span>
+        <h4>Crasse venue du sol</h4>
+        <p>Fill « Ground Dirt », BaseColor est une texture d'herbe/roche (Triplanar, scale 3), masque noir
+        plus un générateur Position réglé pour privilégier le bas du modèle.</p>
+        <div class="params">global_invert 1 · balance 0.88<br>contrast 0.89 · top_to_bottom 1</div>
+      </div>
+    </div>
+
+    <div class="callout">
+      <b>Apply to all models.</b> La case pilote <code>_apply_to_targets()</code> : elle parcourt chaque
+      Texture Set, exécute l'effet sur chacun, et rassemble les références de calques dans des listes —
+      dès lors un seul curseur pilote tous les modèles de la scène à la fois.
+    </div>
+  </section>
+
+  <hr class="rule">
+
+  <!-- 05 -->
+  <section class="chapter" id="ch-05">
+    <span class="chnum">05</span>
+    <h2>Assignation des matériaux au retour</h2>
+    <p class="intro">Les textures reviennent nommées <code>$textureSet_CANAL.png</code>. Max analyse le
+    suffixe et décide lui-même dans quel emplacement, de quel matériau, elle doit aller.</p>
+
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Suffixe</th><th>Canal Painter</th><th>Emplacement Max</th></tr></thead>
+        <tbody>
+          <tr><td class="code">_D</td><td>BaseColor (RGB)</td><td>Diffuse</td></tr>
+          <tr><td class="code">_R</td><td>Roughness (L)</td><td>Roughness, <code style="color:var(--text-muted)">roughness_useRoughness=1</code></td></tr>
+          <tr><td class="code">_M</td><td>Metallic (L)</td><td>Metalness</td></tr>
+          <tr><td class="code">_N</td><td>Normal_DirectX (RGB)</td><td>VRayNormalMap (repli sur Normal_Bump)</td></tr>
+          <tr><td class="code">_A</td><td>Alpha (L, séparé)</td><td>Opacity/cutout, emplacement trouvé dynamiquement</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout">
+      <b>VRayMtl est prioritaire, PhysicalMaterial est le repli.</b> L'accès aux propriétés passe toujours
+      par <code>isProperty</code>, pour ne jamais échouer sur un matériau qui n'a pas l'emplacement voulu.
+    </div>
+    <div class="callout" style="margin-top:12px">
+      <b>Aller-retour opacity/cutout.</b> <code>_D</code> est exporté avec un canal alpha intégré (RGBA) plus
+      un <code>_A</code> séparé en niveaux de gris. Le shader du projet bascule automatiquement sur
+      <code>pbr-metal-rough-with-alpha-test</code> — un cutout franc, pas un blend.
+    </div>
+  </section>
+
+  <hr class="rule">
+
+  <!-- 06 -->
+  <section class="chapter" id="ch-06">
+    <span class="chnum">06</span>
+    <h2>Particularités, correctifs et limites acceptées</h2>
+    <p class="intro">Cinq choses à connaître avant de « corriger » quelque chose une seconde fois.</p>
+
+    <div class="quirks">
+      <div class="quirk">
+        <div class="mark">—</div>
+        <p><b>Les normales sont cuites via une astuce de permutation du diffuse,</b> pas via un élément de
+        cuisson Normal dédié — VRay n'en propose aucun de fiable. L'emplacement du diffuse est
+        temporairement substitué, cuit, puis restauré.</p>
+      </div>
+      <div class="quirk">
+        <div class="mark">—</div>
+        <p><b>Vérification de la stabilité du fichier.</b> Le minuteur compare la taille d'un fichier deux
+        fois, à 200ms d'intervalle, avant de l'importer, pour ne jamais lire un PNG que Painter est
+        encore en train d'écrire.</p>
+      </div>
+      <div class="quirk">
+        <div class="mark">—</div>
+        <p><b>Fuite d'ombre AO depuis les modèles cutout — résolue.</b> Un modèle avec opacity garde une
+        géométrie pleine pour le baker AO, et projette donc une ombre sur les modèles voisins. Corrigé en
+        réduisant <code>Ambient_occlusion.Max_Occluder_Distance</code> par Texture Set via l'API JS interne
+        <code>alg.baking</code> (non documentée en Python), <code>factor=0.1</code>.</p>
+      </div>
+      <div class="quirk">
+        <div class="mark">—</div>
+        <p><b>Halo blanc au bord du cutout — accepté, non résolu.</b> Un léger liseré blanc se cuit dans
+        <code>_D</code> juste à la limite du cutout ; il provient de la cuisson/export de Painter lui-même,
+        pas de Max. Un correctif de dilatation des couleurs côté Max a été essayé puis retiré — il ne
+        fonctionnait pas de façon fiable.</p>
+      </div>
+      <div class="quirk">
+        <div class="mark">—</div>
+        <p><b>Pas de fermetures en MAXScript.</b> Les fonctions anonymes (par ex. les gestionnaires
+        d'événements .NET) ne peuvent pas référencer de variables <code>local</code> externes — c'est
+        pourquoi la logique vit dans les gestionnaires de rollout plutôt que dans un bloc de premier niveau.</p>
+      </div>
+    </div>
+  </section>
+
+  <hr class="rule">
+
+  <!-- 07 -->
+  <section class="chapter" id="ch-07">
+    <span class="chnum">07</span>
+    <h2>Distribution et état actuel</h2>
+    <p class="intro">S'installe à partir d'un seul fichier .mzp — aucun installateur Windows impliqué.</p>
+
+    <div class="dist">
+      <div class="dist-item"><div class="dot"></div><p><b>Installateur MZP</b> — <code>Run_Substance_Bridge_Installer.ms</code> : à glisser dans le viewport de Max ; il place le .mcr dans <code>userMacros</code>, quatre icônes BMP dans <code>userIcons</code>, et le .py dans <code>Documents\Adobe\Adobe Substance 3D Painter\python\plugins\</code>.</p></div>
+      <div class="dist-item"><div class="dot"></div><p><b>Icônes du bouton</b> — paires BMP héritées (<code>_i</code> couleur + <code>_a</code> masque alpha) ; le bouton de la barre d'outils n'a jamais pris en compte les icônes nommées en PNG.</p></div>
+      <div class="dist-item"><div class="dot"></div><p><b>Catégorie du bouton</b> — <code>« Physicl »</code>, la faute d'orthographe est conservée volontairement.</p></div>
+    </div>
+
+    <div class="tbl-wrap" style="margin-top:30px">
+      <table>
+        <thead><tr><th>État</th><th>Quoi exactement</th></tr></thead>
+        <tbody>
+          <tr><td><span class="status-dot done"></span>Fait</td><td>Vérification UV et correction automatique (deux passes, double empaquetage)</td></tr>
+          <tr><td><span class="status-dot done"></span>Fait</td><td>Cuisson et export FBX, lancement automatique de Painter</td></tr>
+          <tr><td><span class="status-dot done"></span>Fait</td><td>ADD DIRT / ADD WEATHERING (smart mask) / ADD GROUND DIRT</td></tr>
+          <tr><td><span class="status-dot done"></span>Fait</td><td>Mode multi-modèles — Apply to all models</td></tr>
+          <tr><td><span class="status-dot done"></span>Fait</td><td>Import automatique des textures et assignation des matériaux dans Max</td></tr>
+          <tr><td><span class="status-dot done"></span>Fait</td><td>Aller-retour opacity/cutout avec le shader alpha-test</td></tr>
+          <tr><td><span class="status-dot limit"></span>Accepté</td><td>Halo blanc au bord du cutout — non résolu, plus en chantier</td></tr>
+          <tr><td><span class="status-dot pending"></span>Prévu</td><td>Ground Dirt en Smart Mask — pour la portabilité entre projets</td></tr>
+          <tr><td><span class="status-dot pending"></span>Prévu</td><td>Un canal Height/Displacement pour les effets</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <hr class="rule">
+
+  <!-- 08 -->
+  <section class="chapter" id="ch-08">
+    <span class="chnum">08</span>
+    <h2>Vidéos de démonstration</h2>
+    <p class="intro">Deux courts enregistrements tirés de la chaîne de l'auteur — l'installation, et un effet en action.</p>
+
+    <div class="video-grid">
+      <a class="video-card" href="https://youtu.be/n9Z5K50d9c8" target="_blank" rel="noopener noreferrer">
+        <div class="thumb">
+          <img src="thumb-install.jpg" alt="How to install and use Substance Bridge — aperçu vidéo" loading="lazy">
+          <div class="play"><span><svg viewBox="0 0 24 24"><path d="M6 4l15 8-15 8z"/></svg></span></div>
+        </div>
+        <div class="meta">
+          <span class="kicker">Installation · étapes 01–08</span>
+          <h4>How to install and use Substance Bridge</h4>
+          <p>Installation du .mzp, premier lancement de SEND TO PAINTER, et cycle complet jusqu'au retour des textures dans Max.</p>
+          <span class="link">youtu.be/n9Z5K50d9c8 ↗</span>
+        </div>
+      </a>
+      <a class="video-card" href="https://youtu.be/mcpUPi2rAdg" target="_blank" rel="noopener noreferrer">
+        <div class="thumb">
+          <img src="thumb-ground.jpg" alt="Smooth transition from ground to model — aperçu vidéo" loading="lazy">
+          <div class="play"><span><svg viewBox="0 0 24 24"><path d="M6 4l15 8-15 8z"/></svg></span></div>
+        </div>
+        <div class="meta">
+          <span class="kicker">Effet · ADD GROUND DIRT</span>
+          <h4>Smooth transition from ground to model</h4>
+          <p>Le générateur Position privilégiant le bas du modèle, en action — le même effet que celui décrit au chapitre 04.</p>
+          <span class="link">youtu.be/mcpUPi2rAdg ↗</span>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <hr class="rule">
+
+  <footer>
+    <p>Substance Bridge · outil interne · v2.7.0 · document au 21 septembre 2026</p>
+  </footer>
+
+</main>
+
+<script>
+(function(){
+  var links = Array.prototype.slice.call(document.querySelectorAll('#chapter-nav a'));
+  var sections = links.map(function(a){ return document.querySelector(a.getAttribute('href')); });
+  if (!('IntersectionObserver' in window)) return;
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      var idx = sections.indexOf(entry.target);
+      if (idx === -1) return;
+      if (entry.isIntersecting) {
+        links.forEach(function(l){ l.classList.remove('active'); });
+        links[idx].classList.add('active');
+      }
+    });
+  }, { rootMargin: '-40% 0px -55% 0px', threshold: 0 });
+  sections.forEach(function(s){ if (s) io.observe(s); });
+})();
+</script>
