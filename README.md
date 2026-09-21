@@ -4,13 +4,16 @@
 Одна кнопка в Max перевіряє UV, пакує текстури, експортує FBX і відкриває Painter.
 Одна кнопка в Painter повертає готові 4K-текстури назад у Max і сама призначає їх матеріалам.
 
-Технічний огляд проєкту (архітектура, повний цикл, система ефектів, стан):
+Технічний огляд проєкту (архітектура, повний цикл, система ефектів, стан): **[awark10.github.io/substance-bridge](https://awark10.github.io/substance-bridge/)**
 
-- 🇬🇧 [English](https://claude.ai/artifact/KtDqsejqcHcCQA7Gb3EnyR)
-- 🇫🇷 [Français](https://claude.ai/artifact/PQTUJbZ5iDUyhSqocwRfKb)
-- 🇷🇺 [Русский](https://claude.ai/artifact/RpWNGEVPs8dtYRRKybwWxa)
+- 🇬🇧 [English](https://awark10.github.io/substance-bridge/overview/en.html)
+- 🇫🇷 [Français](https://awark10.github.io/substance-bridge/overview/fr.html)
+- 🇷🇺 [Русский](https://awark10.github.io/substance-bridge/overview/ru.html)
 
-Копії тих самих сторінок лежать у [`docs/overview/`](docs/overview/).
+Ті самі сторінки також опубліковані як Claude Artifacts:
+[EN](https://claude.ai/artifact/KtDqsejqcHcCQA7Gb3EnyR) ·
+[FR](https://claude.ai/artifact/PQTUJbZ5iDUyhSqocwRfKb) ·
+[RU](https://claude.ai/artifact/RpWNGEVPs8dtYRRKybwWxa)
 
 ## Структура
 
