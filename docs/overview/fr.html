@@ -144,6 +144,25 @@
   .stat .num { font-family: 'IBM Plex Mono', monospace; font-weight: 500; font-size: 26px; color: var(--accent); font-variant-numeric: tabular-nums; }
   .stat .label { font-size: 12.5px; color: var(--text-muted); margin-top: 4px; }
 
+  /* ---------- quickstart (installation / rules) ---------- */
+  .quickstart {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 1px;
+    background: var(--border); border: 1px solid var(--border); margin-top: 26px;
+  }
+  .qs-card { background: var(--surface); padding: 20px 22px; }
+  .qs-card .qs-icon {
+    width: 40px; height: 40px; border-radius: 2px; display: flex; align-items: center; justify-content: center;
+    margin-bottom: 12px;
+  }
+  .qs-card .qs-icon svg { width: 20px; height: 20px; }
+  .qs-card.install .qs-icon { background: var(--accent-soft); color: var(--accent); }
+  .qs-card.rules .qs-icon { background: var(--accent-2-soft); color: var(--accent-2); }
+  .qs-card h3 { font-size: 17px; margin-bottom: 12px; }
+  .qs-card ol, .qs-card ul { margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 7px; }
+  .qs-card li { font-size: 14px; color: var(--text-muted); line-height: 1.45; }
+  .qs-card li::marker { color: var(--text-muted); font-family: 'IBM Plex Mono', monospace; font-size: 12.5px; }
+  .qs-card code { background: var(--mono-bg); padding: 1px 5px; border-radius: 2px; font-size: 0.9em; color: var(--text); }
+
   hr.rule { border: none; border-top: 1px solid var(--border); margin: 40px 0 0; }
 
   /* ---------- chapters ---------- */
@@ -282,6 +301,7 @@
   .lang-switch a.current { color: var(--accent); border-color: var(--accent); background: var(--accent-soft); }
 
   @media (max-width: 720px) {
+    .quickstart { grid-template-columns: 1fr; }
     .handoff { grid-template-columns: 1fr; }
     .handoff .arrowcell { flex-direction: row; padding: 10px 4px; }
     .handoff .arrowcell .glyph { transform: rotate(90deg); }
@@ -323,6 +343,32 @@
 </header>
 
 <main class="wrap">
+
+  <div class="quickstart">
+    <div class="qs-card install">
+      <div class="qs-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+      </div>
+      <h3>Installation</h3>
+      <ol>
+        <li>Exécuter <code>Scripting → Run Script</code> et choisir l'installateur</li>
+        <li>Activer le plugin dans Substance Painter</li>
+        <li>Ajouter le bouton à la barre d'outils depuis la catégorie <code>Physicl</code></li>
+      </ol>
+    </div>
+    <div class="qs-card rules">
+      <div class="qs-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"></path><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
+      </div>
+      <h3>Règles principales</h3>
+      <ul>
+        <li>Utiliser un Physical Material</li>
+        <li>Déplier le modèle (UV) avant de l'envoyer à Painter</li>
+        <li>Renommer les textures après utilisation</li>
+        <li>Substance 3D Painter 2025 ou plus récent</li>
+      </ul>
+    </div>
+  </div>
 
   <div class="hero">
     <span class="eyebrow">Description technique</span>
